@@ -17,9 +17,11 @@ import abc.customer.statement.Statement.Transaction;
  * Application which offers 2 rest endpoints which validate a customer
  * statement.
  * 
- * For validation @see abc.customer.statement.StatementProcessor For conversions
- * from xml and csv @see abc.customer.statement.Statement For the api
- * layer, @see abc.customer.statement.StatementValidationController
+ * For validation @see abc.customer.statement.StatementProcessor
+ *
+ * For the conversions from xml and csv @see abc.customer.statement.Statement
+ *
+ * For the api layer @see abc.customer.statement.StatementValidationController
  */
 @SpringBootApplication
 public class Application {
@@ -42,12 +44,14 @@ public class Application {
     @Bean
     public CsvStatementMapper cSVCustomerStatementMapper() {
         final var csvMapper = CsvMapper.builder()
-                .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY).build();
+                                       .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+                                       .build();
         csvMapper.registerModule(new JavaTimeModule());
         final var csvSchema = csvMapper.schemaFor(Transaction.class)
-                .withHeader().withColumnSeparator(',');
-        final var objectReader =
-                csvMapper.readerFor(Transaction.class).with(csvSchema);
+                                       .withHeader()
+                                       .withColumnSeparator(',');
+        final var objectReader = csvMapper.readerFor(Transaction.class)
+                                          .with(csvSchema);
         return csv -> new Statement(
                 objectReader.<Transaction>readValues(csv).readAll());
     }

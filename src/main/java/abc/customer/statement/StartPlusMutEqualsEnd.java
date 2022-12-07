@@ -22,20 +22,19 @@ import java.lang.annotation.Documented;
 @Documented
 @Constraint(validatedBy = { StartPlusMutEqualsEnd.Validator.class })
 public @interface StartPlusMutEqualsEnd {
-    public static final String MESSAGE = """
+    String MESSAGE = """
             startBalance and mutation do not add up to endBalance""";
 
     String message() default MESSAGE;
-
     Class<?>[] groups() default {};
-
     Class<? extends Payload>[] payload() default {};
 
     class Validator implements
             ConstraintValidator<StartPlusMutEqualsEnd, Statement.Transaction> {
 
         @Override
-        public boolean isValid(final Transaction value,
+        public boolean isValid(
+                final Transaction value,
                 final ConstraintValidatorContext context) {
             final var expected = value.startBalance().add(value.mutation());
             return value.endBalance().compareTo(expected) == 0;

@@ -16,16 +16,20 @@ import jakarta.validation.constraints.PositiveOrZero;
  */
 @JacksonXmlRootElement(localName = "records")
 public record Statement(
-        @JacksonXmlElementWrapper(useWrapping = false) @JacksonXmlProperty(
-                localName = "record") List<Transaction> messages) {
+        @JacksonXmlElementWrapper(useWrapping = false)
+        @JacksonXmlProperty(localName = "record")
+        List<Transaction> messages) {
 
     @StartPlusMutEqualsEnd
     public record Transaction(
-            @JacksonXmlProperty(isAttribute = true,
-                    localName = "reference") long reference,
+            @JacksonXmlProperty(isAttribute = true, localName = "reference")
+            long reference,
             String accountNumber, String description,
-            @PositiveOrZero(message = "startBalance must be greater than or equal to 0") BigDecimal startBalance, BigDecimal mutation,
-            @PositiveOrZero(message = "endBalance must be greater than or equal to 0") BigDecimal endBalance,
+            @PositiveOrZero(message = "startBalance must be greater than or equal to 0")
+            BigDecimal startBalance,
+            BigDecimal mutation,
+            @PositiveOrZero(message = "endBalance must be greater than or equal to 0")
+            BigDecimal endBalance,
             @PastOrPresent LocalDate date) {
     }
 }
